@@ -25,3 +25,10 @@ subclass) with the byte offset of the offending block.
 The awkward edge: the payload byte of a run block may legitimately be 0, so a
 run block `\x03\x00` correctly decodes to three zero bytes.  A naive decoder
 that special-cases a 0 payload will mangle sparse data.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
